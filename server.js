@@ -24,12 +24,19 @@ const authenticateAPI = (req, res, next) => {
 
 // --- Email Sending Logic ---
 const transporter = nodemailer.createTransport({
-  service: 'gmail',
+  service: 'smtp.gmail.com',
+  port: 465,
+  secure: true,
   auth: {
     user: process.env.EMAIL_USER,
     pass: process.env.EMAIL_PASS
+  },
+  tls: {
+    // This helps if the hosting network has strict security rules
+    rejectUnauthorized: false 
   }
-});
+}
+);
 
 // --- API Endpoint ---
 app.post('/api/register', authenticateAPI, async (req, res) => {
