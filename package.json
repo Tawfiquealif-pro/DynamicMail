@@ -3,7 +3,7 @@
     "cors": "^2.8.6",
     "dotenv": "^17.4.1",
     "express": "^5.2.1",
-    "nodemailer": "^8.0.5",
-    "package.json": "^2.0.1"
+    "package.json": "^2.0.1",
+    "resend": "^6.10.0"
   }
 }

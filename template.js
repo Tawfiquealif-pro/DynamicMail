@@ -28,9 +28,8 @@ const templates = {
                             <li style="margin-bottom: 8px;"><strong>ID:</strong> ${data.id}</li>
                             <li style="margin-bottom: 8px;"><strong>Roll:</strong> ${data.roll}</li>
                             <li style="margin-bottom: 8px;"><strong>Amount:</strong> ${data.paidAmount}</li>
-                            <li style="margin-bottom: 8px;"><strong>Amount:</strong> ${data.paymentMethod}</li>
-                            <li style="margin-bottom: 8px;"><strong>Amount:</strong> ${data.phone}</li>
-                            <li style="margin-bottom: 8px;"><strong>Amount:</strong> ${data.trnxID}</li>
+                            <li style="margin-bottom: 8px;"><strong>Payment method:</strong> ${data.paymentMethod}</li>
+                            <li style="margin-bottom: 8px;"><strong>Phone:</strong> ${data.phone}</li>
 
                             <li style="margin-bottom: 0;"><strong>Trnx:</strong> <code style="background: #eee; padding: 2px 4px;">${data.trnxID}</code></li>
                         </ul>
