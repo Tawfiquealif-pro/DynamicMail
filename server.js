@@ -31,13 +31,14 @@ const transporter = nodemailer.createTransport({
     user: process.env.EMAIL_USER,
     pass: process.env.EMAIL_PASS
   },
+  family: 4,
   tls: {
     // This helps if the hosting network has strict security rules
     rejectUnauthorized: false,
     minVersion: 'TLSv1.2'
   },
-  connectionTimeout: 10000, // Wait 10 seconds before giving up
-  greetingTimeout: 10000
+  connectionTimeout: 15000, // Wait 10 seconds before giving up
+  greetingTimeout: 15000
 }
 );
 
