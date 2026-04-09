@@ -26,14 +26,15 @@ const authenticateAPI = (req, res, next) => {
 const transporter = nodemailer.createTransport({
   host: 'smtp.gmail.com',
   port: 587,
-  secure: flase,
+  secure: false,
   auth: {
     user: process.env.EMAIL_USER,
     pass: process.env.EMAIL_PASS
   },
   tls: {
     // This helps if the hosting network has strict security rules
-    rejectUnauthorized: false 
+    rejectUnauthorized: false,
+    minVersion: 'TLSv1.2'
   },
   connectionTimeout: 10000, // Wait 10 seconds before giving up
   greetingTimeout: 10000
