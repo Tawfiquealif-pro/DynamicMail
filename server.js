@@ -1,38 +1,49 @@
 require('dotenv').config();
 const express = require('express');
 const cors = require('cors');
-const { Resend } = require('resend'); // Import Resend
-const templates = require('./template');
+// Import the new BrevoClient
+const { BrevoClient } = require('@getbrevo/brevo');
 
 const app = express();
-const resend = new Resend(process.env.RESEND_API_KEY); // Initialize with API Key
 const PORT = process.env.PORT || 4000;
 
 app.use(cors());
 app.use(express.json());
 
+// --- THE NEW SIMPLE INITIALIZATION ---
+const client = new BrevoClient({ 
+    apiKey: process.env.BREVO_API_KEY
+});
+
+console.log("Checking API Key loading...");
+if (!process.env.BREVO_API_KEY) {
+    console.log("❌ ERROR: BREVO_API_KEY is undefined. Check your .env file!");
+} else {
+    console.log("✅ Key found! Length:", process.env.BREVO_API_KEY.length);
+}
+
 app.post('/api/register', async (req, res) => {
     const { name, email, id, roll, phone, trnxID, paidAmount, paymentMethod } = req.body;
+    const templates = require('./templates');
 
     try {
-        const data = await resend.emails.send({
-            // Note: On the free tier, you must send FROM 'onboarding@resend.dev' 
-            // until you verify a custom domain.
-            from: 'Acme <onboarding@resend.dev>',
-            to: [email], // Use the user's email
-            subject: 'Registration Confirmation - Next Steps',
-            html: templates.webflowStyle({ name, id, roll, trnxID, paidAmount, paymentMethod, phone })
+        // In v5, you access transactional emails through client.transactionalEmails
+        const result = await client.transactionalEmails.sendTransacEmail({
+            subject: "Registration Confirmation - Next Steps",
+            htmlContent: templates.webflowStyle({ name, id, roll, phone, trnxID, paidAmount, paymentMethod }),
+            sender: { 
+                name: "Management Team", 
+                email: "alifnew225@gmail.com" // MUST be verified in Brevo
+            },
+            to: [{ email: email, name: name }]
         });
 
-        if (data.error) {
-            console.error('Resend Error:', data.error);
-            return res.status(400).json({ message: data.error.message });
-        }
-
-        res.status(200).json({ message: "Email sent successfully via Resend!" });
+        console.log('Email sent successfully:', result);
+        res.status(200).json({ message: "Registration successful! Email sent." });
+        
     } catch (error) {
-        console.error('System Error:', error);
-        res.status(500).json({ message: "Internal Server Error" });
+        console.error('Brevo Error:', error);
+        res.status(500).json({ message: "Failed to send email." });
     }
 });
 
